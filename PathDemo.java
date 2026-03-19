@@ -62,11 +62,11 @@ public class PathDemo {
         }
 
         // 3. DIRECTORY LISTING
-        Path tmpDir = Path.of(System.getProperty("java.io.tmpdir"));
-        System.out.println("\n5 regular files in Temp Dir:");
+        Path tmpDirectory = Path.of(System.getProperty("java.io.tmpdir"));
+        System.out.println("\n5 regular files in Temp Directory:");
 
         // try-with-resources is critical here to close the underlying OS directory stream
-        try (var stream = Files.list(tmpDir)) {
+        try (var stream = Files.list(tmpDirectory)) {
             stream.filter(Files::isRegularFile)
                     .limit(5)
                     .forEach(path -> System.out.println(" -> " + path.getFileName()));
