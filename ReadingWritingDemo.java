@@ -17,7 +17,7 @@ void main() throws IOException {
     String content = Files.readString(file, StandardCharsets.UTF_8);
     IO.println(content);
 
-    IO.println("── 2b. Read all lines into a List ──");
+    IO.println("2b. Read all lines into a List");
 
     List<String> allLines = Files.readAllLines(file, StandardCharsets.UTF_8);
     allLines.forEach(System.out::println);
