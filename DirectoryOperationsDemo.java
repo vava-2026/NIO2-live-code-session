@@ -2,7 +2,7 @@ import static java.lang.IO.println;
 
 void main() {
     String wd = Path.of("").toAbsolutePath().toString();
-    Path root = Path.of(wd, "NIO2-live-code-session",
+    Path root = Path.of(wd,
             "examples", "directory-operations");
 
     createDirectoryExample(root, "new-single-directory", "path/of/directories/to/create", "non-existent");
