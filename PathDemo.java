@@ -69,7 +69,7 @@ public class PathDemo {
         try (var stream = Files.list(tmpDirectory)) {
             stream.filter(Files::isRegularFile)
                     .limit(5)
-                    .forEach(path -> System.out.println(" -> " + path.getFileName()));
+                    .forEach(path -> System.out.println("\t" + path.getFileName()));
         }
     }
 }
