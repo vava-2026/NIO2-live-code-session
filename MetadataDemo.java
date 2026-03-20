@@ -1,5 +1,5 @@
 void main() {
-    Path path = Path.of("NIO2-live-code-session/examples/example.txt");
+    Path path = Path.of("examples/example.txt");
     try {
 
         System.out.println("=== BASIC CHECKS ===");
@@ -10,8 +10,6 @@ void main() {
         System.out.println("Regular file: " + Files.isRegularFile(path));
         System.out.println("Directory: " + Files.isDirectory(path));
         System.out.println();
-
-
 
         System.out.println("=== BASIC FILE ATTRIBUTES ===");
         BasicFileAttributes attrs =
