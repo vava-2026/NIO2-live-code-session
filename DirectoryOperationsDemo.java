@@ -1,17 +1,26 @@
 import static java.lang.IO.println;
 
 void main() {
-    String wd = Path.of("").toAbsolutePath().toString();
-    Path root = Path.of(wd,
-            "examples", "directory-operations");
 
-    createDirectoryExample(root, "new-single-directory", "path/of/directories/to/create", "non-existent");
+    // Setup
+    String wd = Path.of("").toAbsolutePath().toString();
+    Path examples = Path.of(wd, "examples");
+    Path root = Path.of(examples.toAbsolutePath().toString(), "directory-operations");
+    try {
+        Files.createDirectories(root);
+    } catch (IOException e) {
+        println("Error setting up root directory: " + e.getMessage());
+        return;
+    }
+
+
+//    createDirectoryExample(root, "new-single-directory", "path/of/directories/to/create", "non-existent");
 //        listDirectoryExample(root);
 //        moveCopyDirectoryExample(root, "demo-dir", "demo-dir-copy", "demo-dir-move-name");
 //        directoryStreamExample(root);
 //        traverseDirectoryExample(root);
-//        deleteDirectoryExample(root, "new-single-directory", "missing-dir");
-//        walkTreeExampleRecursiveCopy(root, "demo-dir-copy-2", ".");
+//    walkTreeExampleRecursiveCopy(root, "directory-operations-copy", ".");
+    deleteDirectoryExample(root, "missing-dir");
 }
 
 public static void createDirectoryExample(Path root, String toCreateDir,
@@ -22,8 +31,8 @@ public static void createDirectoryExample(Path root, String toCreateDir,
         Path deep = Files.createDirectories(root.resolve(toCreateDirs)); // mkdir -p
         Files.createDirectory(root.resolve(existent));             // fails if exists
 
-        println(Files.exists(root));                     // true
-        println(Files.isDirectory(root));                // true
+        println(Files.exists(single));                   // true
+        println(Files.isDirectory(deep));                // true
         println(Files.isHidden(root));                   // platform-specific
     } catch (IOException e) {
         println("Error creating directory: " + e.getMessage());
@@ -86,10 +95,21 @@ public static void traverseDirectoryExample(Path dir) {
     }
 }
 
-public static void deleteDirectoryExample(Path dir, String toDelete, String missingDirectory) {
+public static void deleteDirectoryExample(Path root, String missingDirectory) {
     try {
-        Files.delete(dir.resolve(toDelete));                       // throws if missing
-        Files.deleteIfExists(dir.resolve(missingDirectory));
+        // Deleting folder contents recursively
+        try (var stream = Files.walk(root)) {
+            stream.sorted(Comparator.reverseOrder()) // sorts so deepest files/folders come first
+                    .forEach(path -> {
+                        try {
+                            Files.delete(path); // throws IOException if missing
+                        } catch (IOException e) {
+                            System.err.println("Failed to delete " + path + " - " + e.getMessage());
+                        }
+                    });
+        }
+
+        Files.deleteIfExists(root.resolve(missingDirectory)); // will ignore exception, but return the boolean result
     } catch (IOException e) {
         println("Error deleting directory: " + e.getMessage());
     }
